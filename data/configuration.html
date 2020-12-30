@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      function sendConfiguration() {
+        document.getElementById("alertSSIDFloor").style.display = "none";
+        document.getElementById("alertSSIDCeil").style.display = "none";
+        document.getElementById("alertPassFloor").style.display = "none";
+        document.getElementById("alertPassCeil").style.display = "none";
+        document.getElementById("alertPhoneNameFloor").style.display = "none";
+        document.getElementById("alertPhoneNameCeil").style.display = "none";
+        document.getElementById("alertPhoneNumber").style.display = "none";
+
+        var ss = document.getElementById("SSID").value.trim();
+        var ps = document.getElementById("Pass").value;
+        var pname = document.getElementById("PhoneName").value.trim();
+        var pn = document.getElementById("PhoneNumber").value.trim();
+
+        if (
+          ss == "" ||
+          ss.length > 31 ||
+          ps.length < 8 ||
+          ps.length > 63 ||
+          pn.length != 9 ||
+          isNaN(pn) ||
+          pname.value == "" ||
+          pname.length > 16
+        ) {
+          if (ss == "")
+            document.getElementById("alertSSIDFloor").style.display = "block";
+          if (ss.length > 31)
+            document.getElementById("alertSSIDCeil").style.display = "block";
+
+          if (ps.length < 8)
+            document.getElementById("alertPassFloor").style.display = "block";
+          if (ps.length > 63)
+            document.getElementById("alertPassCeil").style.display = "block";
+
+          if (pn.length != 9 || isNaN(pn))
+            document.getElementById("alertPhoneNumber").style.display = "block";
+
+          if (pname == "")
+            document.getElementById("alertPhoneNameFloor").style.display =
+              "block";
+          if (pname > 30)
+            document.getElementById("alertPhoneNameCeil").style.display =
+              "block";
+
+          return;
+        } else {
+          var obj = {};
+          obj["SSID"] = document.getElementById("SSID").value;
+          obj["Pass"] = document.getElementById("Pass").value;
+          obj["PhoneName"] = document.getElementById("PhoneName").value;
+          obj["PhoneNumber"] = document.getElementById("PhoneNumber").value;
+
+          var output = JSON.stringify(obj);
+          var xhttp = new XMLHttpRequest();
+          xhttp.open("POST", "/saveconfiguration", true);
+          xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.send(output);
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              document.getElementById("wrap").innerHTML =
+                "<h1>Zapisano konfiguracje</h1>";
+            }
+          };
+        }
+      }
+    </script>
+    <style>
+      html {
+        width: 100vw;
+        height: 100vh;
+        font-family: "Montserrat", "Roboto", "Ubuntu", "Helvetica Neue",
+          "Calibri", sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: radial-gradient(
+            circle at 82% 46%,
+            rgba(0, 0, 0, 0.01) 0%,
+            rgba(0, 0, 0, 0.01) 3%,
+            transparent 3%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 69% 5%,
+            rgba(0, 0, 0, 0.02) 0%,
+            rgba(0, 0, 0, 0.02) 3%,
+            transparent 3%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 38% 80%,
+            rgba(0, 0, 0, 0.02) 0%,
+            rgba(0, 0, 0, 0.02) 3%,
+            transparent 3%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 75% 68%,
+            rgba(0, 0, 0, 0.01) 0%,
+            rgba(0, 0, 0, 0.01) 7%,
+            transparent 7%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 44% 94%,
+            rgba(0, 0, 0, 0.03) 0%,
+            rgba(0, 0, 0, 0.03) 7%,
+            transparent 7%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 44% 77%,
+            rgba(0, 0, 0, 0.01) 0%,
+            rgba(0, 0, 0, 0.01) 7%,
+            transparent 7%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 68% 100%,
+            rgba(0, 0, 0, 0.01) 0%,
+            rgba(0, 0, 0, 0.01) 7%,
+            transparent 7%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 58% 79%,
+            rgba(0, 0, 0, 0.02) 0%,
+            rgba(0, 0, 0, 0.02) 7%,
+            transparent 7%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 64% 48%,
+            rgba(0, 0, 0, 0.02) 0%,
+            rgba(0, 0, 0, 0.02) 5%,
+            transparent 5%,
+            transparent 100%
+          ),
+          radial-gradient(
+            circle at 18% 100%,
+            rgba(0, 0, 0, 0.02) 0%,
+            rgba(0, 0, 0, 0.02) 5%,
+            transparent 5%,
+            transparent 100%
+          ),
+          linear-gradient(135deg, hsla(14, 0%, 99%, 1), hsla(29, 0%, 99%, 1));
+      }
+
+      #wrap {
+        min-width: 300px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+
+      h1 {
+        flex: 1;
+        font-weight: 500;
+        margin: 0 0 12px;
+      }
+
+      input {
+        all: unset;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+      }
+
+      .loginElement {
+        width: 100%;
+        max-width: 350px;
+        flex-wrap: wrap;
+        background-color: rgb(240, 240, 240);
+        border: 1px solid #ccc;
+        border-bottom: 0px;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-areas: "label input" "error error";
+        grid-template-rows: auto 1fr;
+      }
+
+      .loginElement:first-of-type {
+        border-radius: 2px 2px 0 0;
+      }
+
+      .loginElement:nth-of-type(4) {
+        border-radius: 0 0 2px 2px;
+        border: 1px solid #ccc;
+      }
+
+      .loginElement:hover,
+      .loginElement:nth-child(odd):hover {
+        background-color: rgba(230, 230, 230, 0.5);
+      }
+
+      .textElement {
+        vertical-align: center;
+        box-sizing: border-box;
+        padding: 12px;
+        color: #333;
+        grid-area: label;
+      }
+
+      .alert {
+        display: none;
+        color: #ee2e31;
+        font-weight: 300;
+        font-size: 12px;
+        min-width: 300px;
+        text-align: left;
+        padding: 0;
+        margin: 0 12px 12px;
+        grid-area: error;
+      }
+
+      label {
+        min-width: 100px;
+      }
+
+      .value {
+        justify-content: end;
+        grid-area: input;
+      }
+
+      #save {
+        flex: 1;
+        border: none;
+        font: inherit;
+        background-color: #4357ad;
+        color: #fff;
+        padding: 12px;
+        margin: 10px 0 0;
+        border-radius: 2px;
+        cursor: pointer;
+
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      #save:hover {
+        background-color: #334284;
+      }
+
+      #save:focus {
+        background-color: #1d2549;
+      }
+
+      .spacer {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <h1>Konfiguracja</h1>
+      <div class="loginElement">
+        <label class="textElement" for="SSID">Nazwa sieci</label>
+        <input class="value" type="text" id="SSID" maxlength="16" />
+        <span class="alert" id="alertSSIDFloor"
+          ><b>To pole nie może być puste!</b></span
+        >
+        <span class="alert" id="alertSSIDCeil"
+          ><b>Przekroczono limit 31 znaków!</b></span
+        >
+      </div>
+      <div class="loginElement">
+        <label class="textElement" for="Pass">Hasło</label>
+        <input
+          class="value"
+          type="password"
+          id="Pass"
+          minlength="8"
+          maxlength="63"
+        />
+        <span class="alert" id="alertPassFloor"
+          ><b>Hasło musi mieć conajmniej 8 znaków!</b></span
+        >
+        <span class="alert" id="alertPassCeil"
+          ><b>Przekroczono limit 63 znaków!</b></span
+        >
+      </div>
+      <div class="loginElement">
+        <label class="textElement" for="PhoneName">Nazwa kontaktu</label>
+        <input class="value" type="text" id="PhoneName" maxlength="30" />
+        <span class="alert" id="alertPhoneNameFloor"
+          ><b>To pole nie może być puste!</b></span
+        >
+        <span class="alert" id="alertPhoneNameCeil"
+          ><b>Przekroczono limit 30 znaków!</b></span
+        >
+      </div>
+      <div class="loginElement">
+        <label class="textElement" for="PhoneNumber">Numer telefonu</label>
+        <input class="value" type="tel" id="PhoneNumber" maxlength="9" />
+        <span class="alert" id="alertPhoneNumber"
+          ><b>Numer składa się z 9 cyfr!</b></span
+        >
+      </div>
+      <div class="spacer">
+        <button id="save" onclick="sendConfiguration()">
+          Zapisz konfigurację
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
